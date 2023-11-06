@@ -1,0 +1,17 @@
+{
+  "$id": "site-entity",
+  "filter": {
+    "entityIds": ["turtlehead-tacos-site"]
+  },
+  "source": "knowledgeGraph",
+  "fields": [
+    "logo",
+    "c_header",
+    "c_footer",
+    "name"
+  ],
+  "localization": {
+    "locales": ["en"],
+    "primary": false
+  }
+}

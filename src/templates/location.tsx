@@ -61,6 +61,7 @@ export const config: TemplateConfig = {
       "dm_directoryParents.slug",
       "dm_directoryParents.meta",
       "dm_directoryParents.c_addressRegionDisplayName",
+      "c_cateringPhoneNumber"
     ],
     // The entity language profiles that documents will be generated for.
     localization: {
@@ -173,6 +174,8 @@ const Location: Template<TemplateRenderProps> = ({
     description,
     siteDomain,
     dm_directoryParents,
+    c_cateringPhoneNumber,
+    _site
   } = document;
 
   return (
@@ -188,6 +191,8 @@ const Location: Template<TemplateRenderProps> = ({
             <Details address={address} phone={mainPhone} services={services} />
             {hours && <Hours title={"Restaurant Hours"} hours={hours} />}
             {description && <About name={name} description={description} />}
+            Catering Phone: {c_cateringPhoneNumber}
+            Header Label: {_site.name}
           </div>
         </div>
       </PageLayout>
