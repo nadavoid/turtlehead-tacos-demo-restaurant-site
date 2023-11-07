@@ -6,7 +6,8 @@ import {
   FilterSearch,
   OnSelectParams,
   VerticalResults,
-  getUserLocation
+  getUserLocation,
+  OnDragHandler
 } from "@yext/search-ui-react";
 import { useEffect, useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
@@ -20,8 +21,44 @@ import {
 import "mapbox-gl/dist/mapbox-gl.css";
 import LocationCard from "./LocationCard";
 import MapPin from "./MapPin";
+import { LngLat, LngLatBounds } from "mapbox-gl";
 
 const StoreLocator = (): JSX.Element => {
+  const resultCount = useSearchState(
+    (state) => state.vertical.resultsCount || 0
+  );
+  const [showSearchAreaButton, setShowSearchAreaButton] = useState(false);
+  const [mapCenter, setMapCenter] = useState<LngLat | undefined>();
+  const [mapBounds, setMapBounds] = useState<LngLatBounds | undefined>();
+
+  const handleDrag: OnDragHandler = (center: LngLat, bounds: LngLatBounds) => {
+    setMapCenter(center);
+    setMapBounds(bounds);
+    setShowSearchAreaButton(true);
+  };
+
+  const handleSearchAreaClick = () => {
+    if (mapCenter && mapBounds) {
+      const locationFilter: SelectableStaticFilter = {
+        selected: true,
+        displayName: "Current map area",
+        filter: {
+          kind: "fieldValue",
+          fieldId: "builtin.location",
+          value: {
+            lat: mapCenter.lat,
+            lng: mapCenter.lng,
+            radius: mapBounds.getNorthEast().distanceTo(mapCenter),
+          },
+          matcher: Matcher.Near,
+        },
+      };
+      searchActions.setStaticFilters([locationFilter]);
+      searchActions.executeVerticalQuery();
+      setShowSearchAreaButton(false);
+    }
+  };
+
   const searchActions = useSearchActions();
 
   const [initialSearchState, setInitialSearchState] =
@@ -96,7 +133,7 @@ const StoreLocator = (): JSX.Element => {
 
   return (
     <>
-      <div className="flex h-[calc(100vh-242px)] border">
+      <div className="relative flex h-[calc(100vh-210px)] border">
         {initialSearchState !== "complete" && (
           <div className="absolute z-20 flex h-full w-full items-center justify-center bg-white opacity-70">
             <BiLoaderAlt className="animate-spin " size={64} />
@@ -113,18 +150,34 @@ const StoreLocator = (): JSX.Element => {
               },
             ]}
           />
-          <VerticalResults
-            customCssClasses={{ verticalResultsContainer: "overflow-y-auto" }}
-            CardComponent={LocationCard}
-          />
+          {/* new code starts here... */}
+          {resultCount > 0 && <VerticalResults CardComponent={LocationCard} />}
+          {resultCount === 0 && initialSearchState === "complete" && (
+            <div className="flex items-center justify-center">
+              <p className="pt-4 text-2xl">No results found for this area</p>
+            </div>
+          )}
         </div>
-        <div className="w-2/3">
+        <div className="relative w-2/3">
           <MapboxMap
             mapboxAccessToken={YEXT_PUBLIC_MAPBOX_API_KEY || ""}
             PinComponent={MapPin}
+            onDrag={handleDrag}
           />
+          {showSearchAreaButton && (
+            <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+              <button
+                onClick={handleSearchAreaClick}
+                className="rounded-2xl border bg-white py-2 px-4 shadow-xl"
+              >
+                <p>Search This Area</p>
+              </button>
+            </div>
+          )}
+          {/* ...and ends here */}
         </div>
       </div>
+
     </>
   );
 };
