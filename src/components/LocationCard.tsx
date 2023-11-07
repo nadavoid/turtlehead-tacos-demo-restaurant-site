@@ -39,7 +39,7 @@ const LocationCard: CardComponent<Location> = ({
             href={getGoogleMapsLink(location.yextDisplayCoordinate)}
             rel="noreferrer"
           >
-            <RiDirectionFill size={24} />
+            <RiDirectionFill size={40} />
             <p>Directions</p>
           </a>
         )}

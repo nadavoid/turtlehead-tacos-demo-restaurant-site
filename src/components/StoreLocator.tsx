@@ -16,6 +16,7 @@ import {
 // Mapbox CSS bundle
 import "mapbox-gl/dist/mapbox-gl.css";
 import LocationCard from "./LocationCard";
+import MapPin from "./MapPin";
 
 const StoreLocator = (): JSX.Element => {
   const searchActions = useSearchActions();
@@ -56,6 +57,7 @@ const StoreLocator = (): JSX.Element => {
         <div className="w-2/3">
           <MapboxMap
             mapboxAccessToken={YEXT_PUBLIC_MAPBOX_API_KEY || ""}
+            PinComponent={MapPin}
           />
         </div>
       </div>
