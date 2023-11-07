@@ -15,6 +15,7 @@ import {
 } from "@yext/search-headless-react";
 // Mapbox CSS bundle
 import "mapbox-gl/dist/mapbox-gl.css";
+import LocationCard from "./LocationCard";
 
 const StoreLocator = (): JSX.Element => {
   const searchActions = useSearchActions();
@@ -49,7 +50,7 @@ const StoreLocator = (): JSX.Element => {
           />
           <VerticalResults
             customCssClasses={{ verticalResultsContainer: "overflow-y-auto" }}
-            CardComponent={StandardCard}
+            CardComponent={LocationCard}
           />
         </div>
         <div className="w-2/3">
