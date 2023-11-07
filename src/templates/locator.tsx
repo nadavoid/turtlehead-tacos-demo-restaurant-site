@@ -33,7 +33,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = () => {
 };
 
 const headlessConfig: HeadlessConfig = {
-  apiKey: "Your_Search_API_Key",
+  apiKey: "19e60df2d6195a71bacb18b5fdd989a5",
   experienceKey: "turtlehead-tacos-locator",
   locale: "en",
   verticalKey: "locations",
