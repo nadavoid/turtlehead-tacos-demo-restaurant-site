@@ -18,6 +18,7 @@ import { FilterSearch } from "@yext/search-ui-react";
 import {
   HeadlessConfig,
 } from "@yext/search-headless-react";
+import StoreLocator from "../components/StoreLocator";
 
 
 export const getPath: GetPath<TemplateProps> = () => {
@@ -47,15 +48,7 @@ const Locator: Template<TemplateRenderProps> = () => {
     <PageLayout>
       <SearchHeadlessProvider searcher={searcher}>
         <div className="mx-auto max-w-7xl px-4">
-          <FilterSearch
-            placeholder="Find Locations Near You"
-            searchFields={[
-              {
-                entityType: "location",
-                fieldApiName: "builtin.location",
-              },
-            ]}
-          />
+          <StoreLocator />
         </div>
       </SearchHeadlessProvider>
     </PageLayout>
