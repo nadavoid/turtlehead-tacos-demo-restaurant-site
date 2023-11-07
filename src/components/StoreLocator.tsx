@@ -22,8 +22,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import LocationCard from "./LocationCard";
 import MapPin from "./MapPin";
 import { LngLat, LngLatBounds } from "mapbox-gl";
+import { Switch } from "@headlessui/react";
+import classNames from "classnames";
 
 const StoreLocator = (): JSX.Element => {
+  const [showResults, setShowResults] = useState(true);
+
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -133,13 +137,13 @@ const StoreLocator = (): JSX.Element => {
 
   return (
     <>
-      <div className="relative flex h-[calc(100vh-210px)] border">
+      <div className="relative flex h-[calc(100vh-210px)] flex-col border md:flex-row ">
         {initialSearchState !== "complete" && (
           <div className="absolute z-20 flex h-full w-full items-center justify-center bg-white opacity-70">
             <BiLoaderAlt className="animate-spin " size={64} />
           </div>
         )}
-        <div className="flex w-1/3 flex-col">
+        <div className="flex w-full flex-col overflow-y-auto md:w-1/3">
           <FilterSearch
             onSelect={handleFilterSelect}
             placeholder="Find Locations Near You"
@@ -150,15 +154,41 @@ const StoreLocator = (): JSX.Element => {
               },
             ]}
           />
-          {/* new code starts here... */}
-          {resultCount > 0 && <VerticalResults CardComponent={LocationCard} />}
-          {resultCount === 0 && initialSearchState === "complete" && (
-            <div className="flex items-center justify-center">
-              <p className="pt-4 text-2xl">No results found for this area</p>
-            </div>
-          )}
+          <div className="z-[5] flex w-full justify-center space-x-2 bg-zinc-100 py-4 shadow-lg md:hidden">
+            <p>Map</p>
+            <Switch
+              checked={showResults}
+              onChange={setShowResults}
+              className={`${
+                showResults ? "bg-orange" : "bg-zinc-300"
+              } relative inline-flex h-6 w-11 items-center rounded-full`}
+            >
+              <span
+                aria-hidden="true"
+                className={`${
+                  showResults ? "translate-x-6 " : "translate-x-1 bg-orange"
+                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </Switch>
+            <p>Results</p>
+          </div>
+          <div
+            className={classNames(
+              "absolute top-[100px] bg-white left-0 right-0 bottom-0 overflow-hidden overflow-y-auto md:static",
+              { "z-[5]": showResults }
+            )}
+          >
+            {resultCount > 0 && (
+              <VerticalResults CardComponent={LocationCard} />
+            )}
+            {resultCount === 0 && initialSearchState === "complete" && (
+              <div className="flex items-center justify-center">
+                <p className="pt-4 text-2xl">No results found for this area</p>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="relative w-2/3">
+        <div className="relative h-[calc(100vh-310px)] w-full md:h-full md:w-2/3">
           <MapboxMap
             mapboxAccessToken={YEXT_PUBLIC_MAPBOX_API_KEY || ""}
             PinComponent={MapPin}
@@ -174,7 +204,6 @@ const StoreLocator = (): JSX.Element => {
               </button>
             </div>
           )}
-          {/* ...and ends here */}
         </div>
       </div>
 
