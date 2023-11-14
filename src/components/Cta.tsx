@@ -9,6 +9,11 @@ export interface CtaProps {
 }
 
 const Cta = ({ buttonText, url, style }: CtaProps) => {
+  const conversionData = {
+    cid: "9416750b-23e0-4f1d-aacc-ef3aa5b64911",
+    cv: "12"
+  };
+
   return (
     <Link
       href={url}
@@ -19,6 +24,7 @@ const Cta = ({ buttonText, url, style }: CtaProps) => {
       target=""
       rel="noopener noreferrer"
       eventName={`cta Click: ${buttonText}`}
+      conversionDetails={conversionData}
     >
       {buttonText}
     </Link>
