@@ -43,9 +43,12 @@ const headlessConfig: HeadlessConfig = {
 
 const searcher = provideHeadless(headlessConfig);
 
-const Locator: Template<TemplateRenderProps> = () => {
+const Locator: Template<any> = ({
+  document,
+  __meta
+}) => {
   return (
-    <PageLayout>
+    <PageLayout templateData={{__meta, document}}>
       <SearchHeadlessProvider searcher={searcher}>
         <div className="mx-auto max-w-7xl px-4">
           <StoreLocator />

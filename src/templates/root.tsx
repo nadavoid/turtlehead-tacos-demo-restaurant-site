@@ -69,15 +69,16 @@ export const getHeadConfig: GetHeadConfig<
   };
 };
 
-const Index: Template<TemplateRenderProps> = ({
+const Index: Template<any> = ({
   relativePrefixToRoot,
   document,
+  __meta
 }) => {
   const { dm_directoryChildren } = document;
 
   return (
     <>
-      <PageLayout>
+      <PageLayout templateData={{__meta, document}}>
         <Banner name={"Turtlehead Tacos"} />
         <div className="centered-container">
           <div className="section space-y-14 px-10">

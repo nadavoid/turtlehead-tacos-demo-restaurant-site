@@ -161,9 +161,10 @@ export const transformProps: TransformProps<any> = async (data) => {
  * components any way you'd like as long as it lives in the src folder (though you should not put
  * them in the src/templates folder as this is specific for true template files).
  */
-const Location: Template<TemplateRenderProps> = ({
+const Location: Template<any> = ({
   relativePrefixToRoot,
   document,
+  __meta
 }) => {
   const {
     name,
@@ -180,7 +181,7 @@ const Location: Template<TemplateRenderProps> = ({
 
   return (
     <>
-      <PageLayout>
+      <PageLayout _site={_site} templateData={{__meta, document}}>
         <Banner name={name} address={address} />
         <div className="centered-container">
           <BreadCrumbs
