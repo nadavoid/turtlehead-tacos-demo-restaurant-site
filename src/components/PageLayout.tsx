@@ -15,7 +15,11 @@ export interface PageLayoutProps {
 
 const PageLayout = ({ children, _site, templateData }: PageLayoutProps) => {
   return (
-    <AnalyticsProvider templateData={templateData} enableDebugging={true}>
+    <AnalyticsProvider
+      templateData={templateData}
+      enableDebugging={true}
+      enableTrackingCookie={true}
+    >
     <div className="min-h-screen">
       <AnalyticsScopeProvider name={"header"}>
         <Header _site={_site} />
